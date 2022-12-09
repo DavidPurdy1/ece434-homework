@@ -24,10 +24,22 @@ except ValueError:
 grid = [['.' for i in range(xMax)] for j in range(yMax)]
 
 def print_grid(g):
-  mx = len(str(xMax)) # get max amount of digits in x
+  printarr = []
+  printarr.append([i for i in range(xMax)])
+  printarr[0].insert(0," ")
   for row in g:
+    printarr.append(row)
+  for i in range(len(printarr) - 1):
+    printarr[i + 1].insert(0,i)
+    
+  mx = len(str(xMax)) # get max amount of digits in x
+  for row in printarr:
     print(" ".join(["{:<{mx}}".format(ele,mx=mx) for ele in row]))
   print()
+
+  for row in g:
+    row.pop(0)
+
 
 print("Welcome to the etch-a-sketch simulator!")
 print("Commands:")
@@ -37,7 +49,7 @@ print("  l - move left")
 print("  r - move right")
 print("  c - clear the screen")
 print("  q - quit")
-print("Enter a command: ")
+print()
 
 grid[y % yMax][x % xMax] = '*'
 print_grid(grid)
