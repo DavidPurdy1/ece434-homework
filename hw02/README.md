@@ -1,8 +1,9 @@
 # Homework 2
 
 - [x] Buttons and Leds
-- [ ] Measuring a GPIO ping on Oscilloscope
+- [x] Measuring a GPIO ping on Oscilloscope
 - [x] GPIOd
+- [ ] getSetEvent.py
 - [x] Security
 - [x] Etch-e-sketch
 
@@ -10,7 +11,7 @@
 
 ```bash
 bone$ cd exercises/gpio
-bone$ ./togglegpio.sh 60 0.1 
+bone$ ./togglegpio.sh 44 0.1 
 ```
 
 1. What's the min and max voltage?
@@ -37,11 +38,13 @@ bone$ ./togglegpio.sh 60 0.1
 | 0.080 | 199.6 |
 
 7. How stable is the period?
-**Stable because the standard deviation is 87.86m**
+**Kinda unstable because the standard deviation is 87.86m**
 
 8. Try launching something like vi. How stable is the period?
+**Kinda unstable as well, didn't notice much of a difference and the std dev is actually lower**
 
 9. Try cleaning up togglegpio.sh and removing unneeded lines. Does it impact the period?
+**Removing unnecessary lines does I think make the period smaller, but it is hard to tell really**
 
 10. Togglegpio.sh uses bash (first line in file). Try using sh. Is the period shorter?
 **It is a lot shorter, so sh runs faster than bash.**
@@ -54,9 +57,8 @@ bone$ ./togglegpio.sh 60 0.1
 |------|--------|-----------|
 | Shell Script | 238.9ms | 4.185Hz |
 | Python Script| 9.902ms | 101.02Hz |
-| C program | Test |
-
+| C program w/ lseek | 0.0752ms | 13.3kHz |
 
 ### Change SSH Port
 
-I have in fact changed my ssh port.
+I have in fact changed my ssh port to 2022
