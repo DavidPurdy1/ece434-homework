@@ -14,6 +14,9 @@ togglegpio:	togglegpio.o gpio-utils.o
 
 ncurses:	ncurses.c
 	gcc ncurses.c -lncurses -o ncurses
+gpio_lseek:	togglegpio_lseek.o gpio-utils.o
+	$(CC) $(LDFLAGS) -o $@ $^
+
 
 #
 # Objects

@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 	//Integer to keep track of whether we want on or off
 	int toggle = 0;
 	int onOffTime;	// Time in micro sec to keep the signal on/off
-	int gpio = 60;
+	int gpio = 44;
 	int gpio_fd;
 
 	if (argc < 2) {
@@ -48,12 +48,13 @@ int main(int argc, char** argv)
 	gpio_set_dir(gpio, "out");
 	printf("...direction set to output\n");
 			
+	gpio_fd = gpio_fd_open(gpio, O_WRONLY);
 	//Run an infinite loop - will require Ctrl-C to exit this program
 	while(1)
 	{
 		toggle = !toggle;
 		
-		gpio_fd = gpio_fd_open(gpio, O_WRONLY);
+		lseek(gpio_fd, 0, SEEK_SET); // reset to beginning of file
 
 		// gpio_set_value(gpio, toggle);
 		// printf("...value set to %d...\n", toggle);
@@ -62,10 +63,10 @@ int main(int argc, char** argv)
 		else
 			write(gpio_fd, "0", 2);
 			
-		gpio_fd_close(gpio_fd);
 		//Pause for a while
 		usleep(onOffTime);
 	}
 
+	gpio_fd_close(gpio_fd);
 	return 0;
 }
