@@ -16,7 +16,7 @@ GPIO.setup("P8_18", GPIO.OUT)
 
 GPIO.setup("P8_11", GPIO.IN)
 GPIO.setup("P8_13", GPIO.IN)
-GPIO.setup("P8_19", GPIO.IN)
+GPIO.setup("P8_15", GPIO.IN)
 GPIO.setup("P8_17", GPIO.IN)
 
 GPIO.cleanup()
@@ -31,8 +31,8 @@ while True:
     print("HIGH 13")
     GPIO.output("P8_14", GPIO.HIGH)
 
-  if GPIO.input("P8_19") == 1:
-    print("HIGH 19")
+  if GPIO.input("P8_15") == 1:
+    print("HIGH 15")
     GPIO.output("P8_16", GPIO.HIGH)
 
   if GPIO.input("P8_17") == 1:

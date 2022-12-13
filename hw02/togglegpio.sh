@@ -43,15 +43,12 @@ while [ "1" = "1" ]; do
     THIS_VALUE=1
   fi
   echo $THIS_VALUE > /sys/class/gpio/gpio${GPIO}/value
-#  echo -n $EV
 
-  # sleep for a while
   sleep $PERIOD
 
   # wrap line every 72 samples
   NEWLINE=`expr $NEWLINE + 1`
   if [ "$NEWLINE" = "72" ]; then
-#    echo ""
     NEWLINE=0
   fi
 
