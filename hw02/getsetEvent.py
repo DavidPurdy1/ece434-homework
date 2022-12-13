@@ -11,7 +11,8 @@
 # //////////////////////////////////////
 # Based on https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/bindings/python/examples
 # ^^^^^
-# TODO: Check on the examples link, I think that this file no longer works
+# TODO: Check on the examples link, I think that this code no longer works
+# https://vocal.com/resources/development/how-can-i-control-gpios-on-embedded-linux-from-python/
 
 import gpiod
 import sys
@@ -36,6 +37,9 @@ def print_event(event):
 chip = gpiod.Chip(CHIP)
 
 getlines = chip.get_lines(getoffsets)
+
+print(chip)
+print(getlines)
 getlines.request(consumer=CONSUMER, type=gpiod.LINE_REQ_EV_BOTH_EDGES)
 
 setlines = chip.get_lines(setoffsets)
