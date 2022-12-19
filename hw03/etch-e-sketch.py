@@ -20,12 +20,14 @@ GPIO.setup("P8_17", GPIO.IN)
 
 GPIO.cleanup()
 
+# set up the LED matrix i2c stuff
 bus = smbus.SMBus(2)
 matrix_address = 0x70
 # set up the LED matrix
 bus.write_byte_data(matrix_address, 0x21, 0)
 bus.write_byte_data(matrix_address, 0x81, 0)
 bus.write_byte_data(matrix_address, 0xe7, 0)
+
 
 if len(sys.argv) != 3:
   print("Usage: etch-e-sketch.py gridXLength gridYLength")
@@ -65,16 +67,29 @@ def print_grid(g):
     row.pop(0)
 
 
+# the led matrix is accessable by column, not row
+# so check if each row in a column is a star, if so, it is a 1 in the binary string
 def led_matrix_update(grid):
-    # color in the LED matrix if there is a *, else turn off
-    matrix_grid = [0] * len(grid) * 4
-    print(matrix_grid)
+    matrix_grid = ["", "", "", "", "", "", "", ""]
+    # for along columns in grid, create binary string
     for i in range(len(grid)):
-      for j in range(len(grid[i])):
-        if grid[i] == '*':
-          matrix_grid[i] = 1
+      for j in range(len(grid)):
+        if grid[j][i] == '*':
+          matrix_grid[i] += '1'
+        else:
+          matrix_grid[i] += '0'
 
-    bus.write_i2c_block_data(matrix_address, 0, matrix_grid)
+    # convert binary strings to integers
+    for i in range(len(matrix_grid)):
+      matrix_grid[i] = int(matrix_grid[i], 2)
+
+    # make them only the red for now
+    i2c_block_data = []
+    for i in range(len(matrix_grid)):
+      i2c_block_data.append(0)
+      i2c_block_data.append(matrix_grid[i])
+    # write to the i2c bus
+    bus.write_i2c_block_data(matrix_address, 0, i2c_block_data)
 
 print("Welcome to the etch-a-sketch simulator!")
 print("Commands:")
