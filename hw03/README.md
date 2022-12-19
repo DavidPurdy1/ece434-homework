@@ -1,6 +1,6 @@
 # ECE434 Homework 3 David Purdy
 
-- [ ] TMP101 sensors using I2C
+- [x] TMP101 sensors using I2C
 - [ ] Etch-a-sketch with the 8x8 LED matrix
 - [ ] Rotary Encoders with the etch-a-sketch program
 
