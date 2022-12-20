@@ -1,8 +1,8 @@
 # ECE434 Homework 3 David Purdy
 
 - [x] TMP101 sensors using I2C
-- [ ] Etch-a-sketch with the 8x8 LED matrix
-- [ ] Rotary Encoders with the etch-a-sketch program
+- [x] Etch-a-sketch with the 8x8 LED matrix
+- [x] Rotary Encoders with the etch-a-sketch program
 
 ## TMP101
 
@@ -20,6 +20,8 @@ In your kit are two TI, TMP101 i2c temperature sensors. Go to http://ti.com and 
 4. Use the i2cset command to set the temperature limits THIGH and TLOW. Test that they are working.
 
 5. Write a python program that sets the temperature limits on each TMP101 and waits for an interrupt on the ALERT pin, then prints the temperature in F. To keep things simple you may use a shell file to set things up.
+
+- [x] Finish the alert python script
 
 ## Etch-a-sketch
 
