@@ -62,3 +62,26 @@ bone$ ./togglegpio.sh 44 0.1
 ### Change SSH Port
 
 I have in fact changed my ssh port to 2022
+
+# hw02 grading
+
+| Points      | Description |
+| ----------- | ----------- |
+|  2/2 | Buttons and LEDs 
+|  8/8 | Etch-a-Sketch works
+|      | Measuring a gpio pin on an Oscilloscope 
+|  2/2 | Questions answered
+|  4/4 | Table complete
+|  2/2 | gpiod
+|      | Security
+|  1/1 | ssh port 
+|  0/1 | fail2ban
+| 20/20   | **Total**
++1 for aggrator.
+
+Nice check list at the start.
+Max voltage seems too small.
+
+It suprising the shell script is so fast.
+
+Looks like you got the gpiod aggregator going.  Nice script.
