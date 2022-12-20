@@ -7,17 +7,11 @@ import smbus
 # HW03 - Etch-a-Sketch
 # David Purdy 12-13-2022
 
-# set up gpio pins
-GPIO.setup("P8_12", GPIO.OUT)
-GPIO.setup("P8_14", GPIO.OUT)
-GPIO.setup("P8_16", GPIO.OUT)
-GPIO.setup("P8_18", GPIO.OUT)
-
-GPIO.setup("P8_11", GPIO.IN)
+# Gpio pins for the buttons
 GPIO.setup("P8_13", GPIO.IN)
+GPIO.setup("P8_14", GPIO.IN)
 GPIO.setup("P8_15", GPIO.IN)
 GPIO.setup("P8_17", GPIO.IN)
-
 GPIO.cleanup()
 
 # set up the LED matrix i2c stuff
@@ -27,6 +21,23 @@ matrix_address = 0x70
 bus.write_byte_data(matrix_address, 0x21, 0)
 bus.write_byte_data(matrix_address, 0x81, 0)
 bus.write_byte_data(matrix_address, 0xe7, 0)
+
+# rotary encoders
+left = '1'
+right = '2'
+ms = 100
+maxCount = '1000000'
+
+def init(eQep):
+    counterpath = '/dev/bone/counter/'+eQep+'/count0'
+
+    with open(counterpath+'/ceiling', 'w') as f:
+        f.write(maxCount)
+    
+    with open(counterpath+'/enable', 'w') as f:
+        f.write('1')
+
+    return open(counterpath+'/count', 'r')
 
 
 if len(sys.argv) != 3:
@@ -105,39 +116,89 @@ grid[y % yMax][x % xMax] = '*'
 print_grid(grid)
 led_matrix_update(grid)
 
+f1 = init(left)
+f2 = init(right)
+
+# get initial values
+f1.seek(0)
+f2.seek(0)
+olddata = int(f1.read()[:-1])
+olddata2 = int(f2.read()[:-1])
+
+# encoder loop
+
 while True:
-  if GPIO.input("P8_11") == 1:
-    print("HIGH 11")
-    y-=1
-    grid[y % yMax][x % xMax] = '*'
-    print_grid(grid)
-    led_matrix_update(grid)
-    time.sleep(0.2)
+  f1.seek(0)
+  f2.seek(0)
 
-  if GPIO.input("P8_13") == 1:
-    print("HIGH 13")
-    y+=1
-    grid[y % yMax][x % xMax] = '*'
-    print_grid(grid)
-    led_matrix_update(grid)
-    time.sleep(0.2)
+  data = int(f1.read()[:-1])
+  if data != olddata:
+      # print("data1", end=" ")
+      # print(data)
+      if data > olddata:
+          x+=1
+          grid[y % yMax][x % xMax] = '*'
+          print_grid(grid)
+          led_matrix_update(grid)
+      elif data < olddata:
+          x-=1
+          grid[y % yMax][x % xMax] = '*'
+          print_grid(grid)
+          led_matrix_update(grid)
+      olddata = data
 
-  if GPIO.input("P8_15") == 1:
-    print("HIGH 19")
-    x-=1
-    grid[y % yMax][x % xMax] = '*'
-    print_grid(grid)
-    led_matrix_update(grid)
-    time.sleep(0.2)
+  data = int(f2.read()[:-1])
+  if data != olddata2:
+      # print("data2", end=" ")
+      # print(data)
+      if data > olddata2:
+          y+=1
+          grid[y % yMax][x % xMax] = '*'
+          print_grid(grid)
+          led_matrix_update(grid)
+      elif data < olddata2:
+          y-=1
+          grid[y % yMax][x % xMax] = '*'
+          print_grid(grid)
+          led_matrix_update(grid)
+      olddata2 = data
+  time.sleep(ms/1000)
 
-  if GPIO.input("P8_17") == 1:
-    print("HIGH 17")
-    x+=1
-    grid[y % yMax][x % xMax] = '*'
-    led_matrix_update(grid)
-    print_grid(grid)
-    time.sleep(0.2)
+  # push buttons
 
+  # if GPIO.input("P8_13") == 1:
+  #   print("HIGH 11")
+  #   y-=1
+  #   grid[y % yMax][x % xMax] = '*'
+  #   print_grid(grid)
+  #   led_matrix_update(grid)
+  #   time.sleep(0.2)
+
+  # if GPIO.input("P8_14") == 1:
+  #   print("HIGH 13")
+  #   y+=1
+  #   grid[y % yMax][x % xMax] = '*'
+  #   print_grid(grid)
+  #   led_matrix_update(grid)
+  #   time.sleep(0.2)
+
+  # if GPIO.input("P8_15") == 1:
+  #   print("HIGH 19")
+  #   x-=1
+  #   grid[y % yMax][x % xMax] = '*'
+  #   print_grid(grid)
+  #   led_matrix_update(grid)
+  #   time.sleep(0.2)
+
+  # if GPIO.input("P8_17") == 1:
+  #   print("HIGH 17")
+  #   x+=1
+  #   grid[y % yMax][x % xMax] = '*'
+  #   led_matrix_update(grid)
+  #   print_grid(grid)
+  #   time.sleep(0.2)
+
+# Keyboard input
 
 # while True:
 #   read = input("Enter a command: ")
