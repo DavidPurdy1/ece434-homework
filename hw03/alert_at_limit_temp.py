@@ -12,8 +12,8 @@ GPIO.cleanup()
 
 bus = smbus.SMBus(2)
 
-Thigh = 25
-Tlow = 20
+Thigh = 23
+Tlow = 19
 
 T1 = 0x49
 T2 = 0x4a
@@ -28,15 +28,22 @@ bus.write_byte_data(T2, 2, Thigh)
 bus.write_byte_data(T2, 3, Tlow)
 
 # wait for an interrupt on the alert pin, if so print the temp
+oldata = -1
+oldata2 = -1
 while True:
   # check if pin is set
     if GPIO.input("P8_16") == 0:
       data = bus.read_i2c_block_data(T1, 0, 2)
       data = data[0]
-      print("Temp 1 in degrees celcius: ", data)
-      print("Temp 1 in degrees farenheit: ", data * 1.8 + 32)
+      if data != oldata:
+        print("Temp 1 in degrees celcius: ", data)
+        print("Temp 1 in degrees farenheit: ", round(data * 1.8 + 32))
+      oldata = data
     if GPIO.input("P8_18") == 0:
       data2 = bus.read_i2c_block_data(T2, 0, 2)
       data2 = data2[0]
-      print("Temp 1 in degrees celcius: ", data2)
-      print("Temp 1 in degrees farenheit: ", data2 * 1.8 + 32)
+      if data2 != oldata2:
+        print("Temp 2 in degrees celcius: ", data2)
+        print("Temp 2 in degrees farenheit: ", round(data2 * 1.8 + 32))
+      oldata2 = data2
+    time.sleep(.1)
