@@ -36,3 +36,17 @@ Modify your etch-a-sketch program to use the bicolor LED matrix in your kit. The
 ## Rotary Encoders
 
 example see [encoder exercise on bone](~/exercises/sensors/eQEP/encoder.py)
+
+# hw03 grading
+
+| Points      | Description | | |
+| ----------- | ----------- |-|-|
+|  8/8 | TMP101 
+|  2/2 |   | Documentation 
+|  5/5 | Etch-a-Sketch
+|  3/3 |   | setup.sh
+|  2/2 |   | Documentation
+| 20/20 | **Total**
+
+*My comments are in italics. --may*
+
