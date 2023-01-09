@@ -4,7 +4,7 @@
 - [ ] GPIO toggling as fast as possible
 - [x] i2c via kernel driver
 - [x] control LED matrix via browser
-- [ ] plug in and control TFT LCD
+- [x] plug in and control TFT LCD
 
 
 ## GPIO via mmap

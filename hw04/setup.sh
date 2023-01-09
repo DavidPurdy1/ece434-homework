@@ -1,8 +1,4 @@
 #!/bin/bash
 
-# Install devmem2
-sudo apt install ti-devmem2
-
-# Install flask
-sudo apt install python3-flask
-
+# Install flask, devmem2, fbi, and mplayer
+sudo apt install python3-flask ti-devmem2 fbi mplayer imagemagick -y
