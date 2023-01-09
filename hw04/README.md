@@ -2,8 +2,8 @@
 
 - [ ] GPIO via mmap
 - [ ] GPIO toggling as fast as possible
-- [ ] i2c via kernal driver
-- [ ] control LED matrix via browser
+- [x] i2c via kernel driver
+- [x] control LED matrix via browser
 - [ ] plug in and control TFT LCD
 
 
@@ -12,8 +12,8 @@
 
 2. Write a C or python program that toggles a GPIO port as fast as it can. Measure the speed with an oscilloscope and compare with your previous measurements. Try toggling with no usleep. Is it faster? 
 
-## i2c via kernal driver
-Read tmp101 sensors using the kernal driver
+## i2c via kernel driver
+Read tmp101 sensors using the kernel driver
 Write a progam that reads the temperature from the kernal driver and prints it to the console.
 
 ## control LED matrix via browser
