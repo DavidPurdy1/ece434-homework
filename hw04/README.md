@@ -1,7 +1,7 @@
 # Homework 4 ECE 434
 
-- [ ] GPIO via mmap
-- [ ] GPIO toggling as fast as possible
+- [x] GPIO via mmap
+- [x] GPIO toggling as fast as possible
 - [x] i2c via kernel driver
 - [x] control LED matrix via browser
 - [x] plug in and control TFT LCD
