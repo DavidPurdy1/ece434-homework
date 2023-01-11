@@ -24,3 +24,17 @@ Control led matrix via browser. Have 4 buttons to control up, down, left, right
 2. Play videos
 3. Generate text
 
+# hw04 grading
+
+| Points      | Description | |
+| ----------- | ----------- | - |
+|  0/2 | Memory map | *Missing*
+|  4/4 | mmap()
+|  4/4 | i2c via Kernel
+|  5/5 | Etch-a-Sketch via flask
+|  5/5 | LCD display
+|      | Extras
+| 18/20 | **Total**
+
+*My comments are in italics. --may*
+
