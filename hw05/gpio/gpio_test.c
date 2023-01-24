@@ -19,45 +19,75 @@ MODULE_VERSION("0.1");
 
 static unsigned int gpioLED = 60;       // P9_12/P2.8 (GPIO60)
 static unsigned int gpioButton = 46;    // P8_16/P2.22 (GPIO46)
+static unsigned int gpioLED2 = 40;       // P9_14/P2.8 (GPIO60)
+static unsigned int gpioButton2 = 65;    // P8_18/P2.22 (GPIO65)
 static unsigned int irqNumber;          // share IRQ num within file
+static unsigned int irqNumber2;          // share IRQ num within file
 static unsigned int numberPresses = 0;  // store number of presses
 static bool	    ledOn = 0;          // used to invert state of LED
+static bool	    ledOn2 = 0;          // used to invert state of LED
 
 // prototype for the custom IRQ handler function, function below
 static irq_handler_t  ebb_gpio_irq_handler(unsigned int irq, void
                                     *dev_id, struct pt_regs *regs);
 
+static irq_handler_t  ebb_gpio_irq_handler2(unsigned int irq, void
+                                    *dev_id, struct pt_regs *regs);
 /** @brief The LKM initialization function */
 static int __init ebb_gpio_init(void){
    int result = 0;
+   int result2 = 0;
    printk(KERN_INFO "GPIO_TEST: Initializing the GPIO_TEST LKM\n");
    if (!gpio_is_valid(gpioLED)){
       printk(KERN_INFO "GPIO_TEST: invalid LED GPIO\n");
       return -ENODEV;
    }
+   if (!gpio_is_valid(gpioLED2)){
+      printk(KERN_INFO "GPIO_TEST: invalid LED GPIO\n");
+      return -ENODEV;
+   }
    ledOn = true;
+   ledOn2 = true;
    gpio_request(gpioLED, "sysfs");          // request LED GPIO
    gpio_direction_output(gpioLED, ledOn);   // set in output mode and on
-// gpio_set_value(gpioLED, ledOn);          // not required
    gpio_export(gpioLED, false);             // appears in /sys/class/gpio
-			               // false prevents direction change
    gpio_request(gpioButton, "sysfs");       // set up gpioButton
    gpio_direction_input(gpioButton);        // set up as input
-//   gpio_set_debounce(gpioButton, 200);      // debounce delay of 200ms
+   gpio_set_debounce(gpioButton, 200);      // debounce delay of 200ms
    gpio_export(gpioButton, false);          // appears in /sys/class/gpio
+
+   gpio_request(gpioLED2, "sysfs");          // request LED GPIO
+   gpio_direction_output(gpioLED2, ledOn2);   // set in output mode and on
+   gpio_export(gpioLED2, false);             // appears in /sys/class/gpio
+   gpio_request(gpioButton2, "sysfs");       // set up gpioButton
+   gpio_direction_input(gpioButton2);        // set up as input
+   gpio_set_debounce(gpioButton2, 200);      // debounce delay of 200ms
+   gpio_export(gpioButton2, false);          // appears in /sys/class/gpio
 
    printk(KERN_INFO "GPIO_TEST: button value is currently: %d\n",
           gpio_get_value(gpioButton));
+   printk(KERN_INFO "GPIO_TEST: button 2 value is currently: %d\n",
+          gpio_get_value(gpioButton2));
    irqNumber = gpio_to_irq(gpioButton);     // map GPIO to IRQ number
+   irqNumber2 = gpio_to_irq(gpioButton2);     // map GPIO to IRQ number
    printk(KERN_INFO "GPIO_TEST: button mapped to IRQ: %d\n", irqNumber);
+   printk(KERN_INFO "GPIO_TEST: button2 mapped to IRQ: %d\n", irqNumber2);
 
    // This next call requests an interrupt line
    result = request_irq(irqNumber,         // interrupt number requested
             (irq_handler_t) ebb_gpio_irq_handler, // handler function
-            IRQF_TRIGGER_RISING,  // on rising edge (press, not release)
+            IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
             "ebb_gpio_handler",  // used in /proc/interrupts
             NULL);                // *dev_id for shared interrupt lines
+
+   result2 = request_irq(irqNumber2,         // interrupt number requested
+            (irq_handler_t) ebb_gpio_irq_handler2, // handler function
+            IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING, // on rising edge and falling edge
+            "ebb_gpio_handler",  // used in /proc/interrupts
+            NULL);                // *dev_id for shared interrupt lines
+
    printk(KERN_INFO "GPIO_TEST: IRQ request result is: %d\n", result);
+   printk(KERN_INFO "GPIO_TEST: IRQ request result is: %d\n", result2);
    return result;
 }
 
@@ -65,13 +95,21 @@ static int __init ebb_gpio_init(void){
 static void __exit ebb_gpio_exit(void){
    printk(KERN_INFO "GPIO_TEST: button value is currently: %d\n",
           gpio_get_value(gpioButton));
+   printk(KERN_INFO "GPIO_TEST: button 2 value is currently: %d\n",
+          gpio_get_value(gpioButton2));
    printk(KERN_INFO "GPIO_TEST: pressed %d times\n", numberPresses);
    gpio_set_value(gpioLED, 0);    // turn the LED off
+   gpio_set_value(gpioLED2, 0);    // turn the LED off
    gpio_unexport(gpioLED);        // unexport the LED GPIO
+   gpio_unexport(gpioLED2);        // unexport the LED GPIO
    free_irq(irqNumber, NULL);     // free the IRQ number, no *dev_id
+   free_irq(irqNumber2, NULL);     // free the IRQ number, no *dev_id
    gpio_unexport(gpioButton);     // unexport the Button GPIO
+   gpio_unexport(gpioButton2);     // unexport the Button GPIO
    gpio_free(gpioLED);            // free the LED GPIO
+   gpio_free(gpioLED2);            // free the LED GPIO
    gpio_free(gpioButton);         // free the Button GPIO
+   gpio_free(gpioButton2);         // free the Button GPIO
    printk(KERN_INFO "GPIO_TEST: Goodbye from the LKM!\n");
 }
 
@@ -92,6 +130,16 @@ static irq_handler_t ebb_gpio_irq_handler(unsigned int irq,
    gpio_set_value(gpioLED, ledOn);     // set LED accordingly
    printk(KERN_INFO "GPIO_TEST: Interrupt! (button is %d)\n",
           gpio_get_value(gpioButton));
+   numberPresses++;                    // global counter
+   return (irq_handler_t) IRQ_HANDLED; // announce IRQ handled
+}
+
+static irq_handler_t ebb_gpio_irq_handler2(unsigned int irq,
+                        void *dev_id, struct pt_regs *regs){
+   ledOn2 = !ledOn2;                     // invert the LED state
+   gpio_set_value(gpioLED2, ledOn2);     // set LED accordingly
+   printk(KERN_INFO "GPIO_TEST: Interrupt! (button 2 is %d)\n",
+          gpio_get_value(gpioButton2));
    numberPresses++;                    // global counter
    return (irq_handler_t) IRQ_HANDLED; // announce IRQ handled
 }
