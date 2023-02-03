@@ -17,10 +17,10 @@ MODULE_AUTHOR("Derek Molloy");
 MODULE_DESCRIPTION("A Button/LED test driver for the Beagle");
 MODULE_VERSION("0.1");
 
-static unsigned int gpioLED = 60;       // P9_12/P2.8 (GPIO60)
-static unsigned int gpioButton = 46;    // P8_16/P2.22 (GPIO46)
-static unsigned int gpioLED2 = 40;       // P9_14/P2.8 (GPIO60)
-static unsigned int gpioButton2 = 65;    // P8_18/P2.22 (GPIO65)
+static unsigned int gpioLED = 46;       // P9_12/P2.8 (GPIO60)
+static unsigned int gpioLED2 = 47;       // P9_14/P2.8 (GPIO60)
+static unsigned int gpioButton = 44;    // P8_16/P2.22 (GPIO46)
+static unsigned int gpioButton2 = 45;    // P8_18/P2.22 (GPIO65)
 static unsigned int irqNumber;          // share IRQ num within file
 static unsigned int irqNumber2;          // share IRQ num within file
 static unsigned int numberPresses = 0;  // store number of presses
@@ -83,7 +83,7 @@ static int __init ebb_gpio_init(void){
    result2 = request_irq(irqNumber2,         // interrupt number requested
             (irq_handler_t) ebb_gpio_irq_handler2, // handler function
             IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING, // on rising edge and falling edge
-            "ebb_gpio_handler",  // used in /proc/interrupts
+            "ebb_gpio_handler2",  // used in /proc/interrupts
             NULL);                // *dev_id for shared interrupt lines
 
    printk(KERN_INFO "GPIO_TEST: IRQ request result is: %d\n", result);

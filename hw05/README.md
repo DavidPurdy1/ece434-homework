@@ -1,14 +1,15 @@
 # Homework 5 ECE434
 
 - [x] Make
-- [ ] Installing the Kernel Source
+- [x] Installing the Kernel Source
 - [x] Kernel Modules
-- [ ] ADXL345 Accelerometer
+- [x] ADXL345 Accelerometer
 
 ## Make 
 Do the (exercise)[http://elinux.org/EBC_make]
 
 ## Installing the kernel source
+- [x]
 
 ## Kernel Modules
 - Got the leds to blink at different periods using the kernel module. 
@@ -16,3 +17,5 @@ Do the (exercise)[http://elinux.org/EBC_make]
 
 ## ADXL345 Accelerometer
 - Get the Accelerometer to work with the etch-a-sketch program.
+
+Luke told me the link on where to find the python accelerometer driver.
