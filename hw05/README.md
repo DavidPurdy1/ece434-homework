@@ -19,3 +19,18 @@ Do the (exercise)[http://elinux.org/EBC_make]
 - Get the Accelerometer to work with the etch-a-sketch program.
 
 Luke told me the link on where to find the python accelerometer driver.
+
+# hw05 grading
+
+| Points      | Description |
+| ----------- | ----------- |
+|  0/0 | Project 
+|  2/2 | Makefile
+|  6/6 | Kernel Source
+|  4/4 | Etch-a-Sketch
+|  8/8 | Kernel Modules: hello, ebbchar, gpio_test, led
+|  4/4 | Extras - Blink at different rates
+| 20/20 | **Total**
+Late: -4
+*My comments are in italics. --may*
+
