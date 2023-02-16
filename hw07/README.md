@@ -18,3 +18,16 @@ It will be filled in soon with project specifics
 ## Systemd
 I threw in the service file that I copied to show that I modified the nginx service file properly
 
+# hw07 grading
+
+| Points      | Description | | |
+| ----------- | ----------- |-|-|
+|  2/2  | Project Template | | 
+|  2/2  | | Names | 
+|  0/2  | | Executive Summary | *missing*
+| 10/10 | Dallas 1-wire
+|  4/4  | systemd auto start |
+|  0    | Blynk - Etch-a-sketch - extra
+| 16/20 | **Total**
+Late: -2
+*My comments are in italics. --may*
